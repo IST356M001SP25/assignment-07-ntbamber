@@ -1,7 +1,7 @@
 # Reflection
 
-Student Name:  name
-Sudent Email:  email
+Student Name:  Noah Bamberger
+Sudent Email:  ntbamber@syr.edu
 
 ## Instructions
 
@@ -22,4 +22,4 @@ Examples:
 **Best Reflection** "I learned when to use while vs for loops. While loops are for sentiel-controlled values (waiting for a condition to occur), vs for loops are for iterating over collections of fixed values."
 
 `--- Reflection Below This Line ---`
-
+In this assignment I learned how to use Playwright to navigate websites and do webscraping. I learned how to navigate CSS and sibling relationships on webpages. I struggled a lot with identifying the correct elements on the page, but query_selector_all and evaluate_handle helped to clarify the structure.

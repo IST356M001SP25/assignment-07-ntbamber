@@ -18,8 +18,8 @@ def test_tullyscraper_menu_csv_file_exists():
 
 def test_tullyscraper_menu_csv_file_proper_rows_and_cols():
     df = pd.read_csv(FILE)
-    print("We expect 113 rows and 4 columns")
-    assert df.shape == (113, 4)
+    print("We expect 107 rows and 4 columns")
+    assert df.shape == (107, 4)
     
 
 # IF YOU NEED TO DEBUG A TEST

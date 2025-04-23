@@ -8,33 +8,36 @@ def tullyscraper(playwright: Playwright) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
-    #page.goto("https://www.tullysgoodtimes.com/menus/")
-    page.goto("https://web.archive.org/web/20241111165815/https://www.tullysgoodtimes.com/menus/")
 
-    titles = page.query_selector_all("h2.menu-section-title")
+    #print("navigating to Tully's menu page...") #Debugging
+    page.goto("https://www.tullysgoodtimes.com/menus/", timeout=60000)
 
-    all_items = []
+    menu_data = []
+    sections = page.query_selector_all("h3.foodmenu__menu-section-title")
+    #print(f"found {len(sections)} menu sections") #Debugging
 
-    for title_element in titles:
-        title_text = title_element.inner_text().strip()
+    for section in sections:
+        category = section.inner_text().strip()
+        #print(f"\n section: {category}") #Debugging
 
-        # Navigate to the next `.row` element
-        row_element = title_element.evaluate_handle("el => el.parentElement.nextElementSibling.nextElementSibling")
-        if not row_element:
-            continue
+        # Get the container div with menu items
+        container = section.evaluate_handle("el => el.nextElementSibling?.nextElementSibling")
 
-        items = row_element.query_selector_all("div.menu-item-text")
+        items = container.query_selector_all("div.foodmenu__menu-item")
+        #print(f"found {len(items)} menu items") #Debugging
 
         for item in items:
-            try:
-                scraped_text = item.inner_text()
-                menu_item = extract_menu_item(title_text, scraped_text)
-                all_items.append(menu_item.to_dict())
-            except Exception as e:
-                print(f"Error processing item: {e}")
+            raw_text = item.inner_text().strip()
+            menu_item = extract_menu_item(category, raw_text)
+            #print(f"confirm: {menu_item.name}") #Debugging
+            menu_data.append(menu_item.to_dict())
 
-    df = pd.DataFrame(all_items)
+    # Save to CSV
+    df = pd.DataFrame(menu_data)
     df.to_csv("cache/tullys_menu.csv", index=False)
+    #print(f"\n Saved {len(menu_data)} items to cache/tullys_menu.csv") #Debugging
+    #print(f"DataFrame shape: {df.shape}") #Debugging
+
     context.close()
     browser.close()
 
